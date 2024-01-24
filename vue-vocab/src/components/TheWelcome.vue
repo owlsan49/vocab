@@ -42,18 +42,21 @@ const onSubmit = () => {
     }
   }
   GetInfoPost(url, submit_params)
-  .then(response => {
-    alert('success')
-  })
-  .catch(error => {
-    alert('error')
-  })
+    .then(response => {
+      alert('success')
+    })
+    .catch(error => {
+      alert('error')
+    })
 }
 </script>
 
 <style>
-
 .el-textarea__inner {
   height: 400px;
+}
+
+body {
+    margin: 100px;
 }
 </style>

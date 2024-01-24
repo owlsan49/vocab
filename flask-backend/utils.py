@@ -20,7 +20,7 @@ def write_json(file_name, json_dict, mode='w'):
         json.dump(json_dict, jf)
 
 
-def update_record(record, data, file_name):
+def init_update(record, data, file_name):
     unidf = data['unidf']
     data['listening_word'] = data['listening_word'].replace("\n", " ").split()
     record[unidf] = {
