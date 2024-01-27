@@ -45,6 +45,8 @@ def init_update(record, data, file_name):
         'sin_plu_word': [],
         'sin_plu_rate': 0.,
         'error_rate': 0.,
+        'ew': [],
+        'rw': [],
     }
     print(record[unidf])
     write_json(file_name, record)
@@ -80,5 +82,7 @@ def update_record(unidf, sec_ids):
             record['sin_plu_rate'] = len(record['sin_plu_word']) / record['word_len']
 
     records[unidf].update(record)
+    records[unidf]['ew'] = error_words
+    records[unidf]['rw'] = refer_words
     write_json(record_path, records)
-    return record, error_words, refer_words
+    return record

@@ -4,6 +4,7 @@ from utils import (read_json, init_update, etypes, write_json,
                    records, gt_vocabs, record_path, update_record)
 
 import shutil
+import random
 
 app = Flask(__name__)
 CORS(app)
@@ -22,19 +23,22 @@ def submit():
 def get_vocab():
     unidf = request.args.get('unidf')
     sec_ids = unidf[-4:]
-    print(sec_ids)
+    update = request.args.get('update')
     results = {'resCode': 0}
     if unidf not in records.keys():
         results['msg'] = 'wrong unidf'
+    elif update == 'false':
+        record = records[unidf]
+        results.update(record)
+        print(results)
     elif sec_ids not in gt_vocabs.keys():
         results['msg'] = 'section id does not exist'
     else:
-
-        record, error_words, refer_words = update_record(unidf, sec_ids)
-        record['ew'] = error_words
-        record['rw'] = refer_words
+        print(f'update: {unidf}')
+        record = update_record(unidf, sec_ids)
+        record['rw'] = random.shuffle(record['rw'])
         results.update(record)
-        print(record)
+
     return jsonify(results)
 
 

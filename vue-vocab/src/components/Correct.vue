@@ -39,9 +39,7 @@ import { GetVocab, GetInfoPost } from '../apis/read'
 
 // do not use same name with ref
 const labelPosition = ref<FormProps['labelPosition']>('top')
-const form = reactive({
-    unidf: '',
-})
+const form = reactive({ unidf: '', update: true})
 const submit_params = {}
 const records = reactive({})
 const corrected_results = ref([])
