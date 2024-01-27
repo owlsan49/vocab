@@ -1,1 +1,1 @@
-a listening sheet web app
+a dictation sheet web app based on vue3, element plus, and flask, including backend and frontend.
