@@ -10,16 +10,12 @@
     </el-form>
 
     <el-form :model="form" label-width="120px" :label-position="labelPosition">
-        <div v-for="(item, index) in processedArray.value" :key="index" class="row">
-            <h2 class="disp_listening"> {{ item.join(' ') }} </h2>
-            <el-form-item>
-                <el-input v-model="correct_words[index]" />
-            </el-form-item>
+        <div class="formatted-list">
+            <h4 class="disp_listening formatted-item" v-for="(item, index) in error_words.value" :key="index"> 
+                {{ item }} - {{ correct_words.value[index] }}
+            </h4> 
+            <!-- <h4 class="disp_correct"> {{ correct_words.value[index].join('   ') }} </h4> -->
         </div>
-
-        <el-form-item>
-            <el-button type="primary" @click="onSubmit">Submit</el-button>
-        </el-form-item>
     </el-form>
 
 
@@ -29,13 +25,11 @@
 
     <div>
         <h2>Results</h2>
-        <ul>
-            <li v-for="(value, key) in corrected_results" class="res_list">{{ key }}: {{ value }}</li>
-        </ul>
+        <h3>error rate: {{ corrected_results.value }}</h3>
     </div>
 
 
-    <el-button><a href="\">Go Home</a></el-button>
+    <!-- <el-button><a href="\">Go Home</a></el-button> -->
 </template>
   
 <script lang="ts" setup>
@@ -50,9 +44,10 @@ const form = reactive({
 })
 const submit_params = {}
 const records = reactive({})
-const processedArray = ref([])
+const corrected_results = ref([])
+const error_words = ref([])
 const correct_words = ref([])
-const gap_length = 8
+const gap_length = 6
 const onDisplay = () => {
     for (const key in form) {
         if (form.hasOwnProperty(key)) {
@@ -68,34 +63,25 @@ const onDisplay = () => {
                 console.log('success')
                 console.log(response.data.listening_word)
                 Object.assign(records, response.data)
-                processedArray.value = computed(() => {
-                    const result = []
-                    for (let i = 0; i < response.data.listening_word.length; i += gap_length) {
-                        result.push(response.data.listening_word.slice(i, i + gap_length));
-                    }
-                    return result;
+                // error_words.value = computed(() => {
+                //     const result = []
+                //     for (let i = 0; i < response.data.ew.length; i += gap_length) {
+                //         result.push(response.data.ew.slice(i, i + gap_length));
+                //     }
+                //     return result;
+                // })
+                error_words.value = computed(() => {
+                    return response.data.ew;
                 })
-                console.log(processedArray.value)
-                // console.log(processedArray)
+                corrected_results.value = computed(() => {
+                    return response.data.error_rate;
+                })
+
+                correct_words.value = computed(() => {
+                    return response.data.rw;
+                })
             }
 
-        })
-        .catch(error => {
-            alert('error')
-        })
-}
-
-const sub_url = '/correct'
-const correct_param = {}
-const corrected_results = reactive({})
-const onSubmit = () => {
-    console.log(correct_words.value.join(' '))
-    correct_param['correct_str'] = correct_words.value.join(' ')
-    correct_param['unidf'] = form['unidf']
-    GetInfoPost(sub_url, correct_param)
-        .then(response => {
-            Object.assign(corrected_results, response.data)
-            console.log('aaaaaa', corrected_results)
         })
         .catch(error => {
             alert('error')
@@ -105,15 +91,25 @@ const onSubmit = () => {
 </script>
   
 <style>
-.disp_listening {
+.disp_listening .disp_correct {
     font-size: 32px;
     white-space: pre;
 }
-
+.disp_correct {
+    color: rgb(187, 3, 3);
+}
 body {
     margin: 100px;
 }
+.formatted-list {
+  display: flex;
+  flex-wrap: wrap;
+}
 
+.formatted-item {
+  width: 30%;
+  text-align: left;
+}
 .res_list {
     font-size: 20px;
 }

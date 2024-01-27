@@ -14,7 +14,7 @@
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Submit</el-button>
-      <el-button><a href="/about">Correct</a></el-button>
+      <!-- <el-button><a href="/about">Correct</a></el-button> -->
     </el-form-item>
   </el-form>
 </template>
