@@ -29,14 +29,14 @@ def get_vocab():
         results['msg'] = 'wrong unidf'
     elif update == 'false':
         record = records[unidf]
+        random.shuffle(record['rw'])
         results.update(record)
-        print(results)
+        print(f'2: {results}')
     elif sec_ids not in gt_vocabs.keys():
         results['msg'] = 'section id does not exist'
     else:
         print(f'update: {unidf}')
         record = update_record(unidf, sec_ids)
-        record['rw'] = random.shuffle(record['rw'])
         results.update(record)
 
     return jsonify(results)

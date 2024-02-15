@@ -11,9 +11,9 @@
 
     <el-form :model="form" label-width="120px" :label-position="labelPosition">
         <div class="formatted-list">
-            <h4 class="disp_listening formatted-item" v-for="(item, index) in error_words.value" :key="index"> 
+            <h4 class="disp_listening formatted-item" v-for="(item, index) in error_words.value" :key="index">
                 {{ item }} - {{ correct_words.value[index] }}
-            </h4> 
+            </h4>
             <!-- <h4 class="disp_correct"> {{ correct_words.value[index].join('   ') }} </h4> -->
         </div>
     </el-form>
@@ -39,7 +39,7 @@ import { GetVocab, GetInfoPost } from '../apis/read'
 
 // do not use same name with ref
 const labelPosition = ref<FormProps['labelPosition']>('top')
-const form = reactive({ unidf: '', update: true})
+const form = reactive({ unidf: '', update: true })
 const submit_params = {}
 const records = reactive({})
 const corrected_results = ref([])
@@ -71,6 +71,7 @@ const onDisplay = () => {
                 error_words.value = computed(() => {
                     return response.data.ew;
                 })
+                console.log('aaaaaa',error_words.value)
                 corrected_results.value = computed(() => {
                     return response.data.error_rate;
                 })
@@ -78,6 +79,7 @@ const onDisplay = () => {
                 correct_words.value = computed(() => {
                     return response.data.rw;
                 })
+                console.log('bbbbbb', response.data)
             }
 
         })
@@ -93,22 +95,25 @@ const onDisplay = () => {
     font-size: 32px;
     white-space: pre;
 }
+
 .disp_correct {
     color: rgb(187, 3, 3);
 }
+
 body {
     margin: 100px;
 }
+
 .formatted-list {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .formatted-item {
-  width: 30%;
-  text-align: left;
+    width: 30%;
+    text-align: left;
 }
+
 .res_list {
     font-size: 20px;
-}
-</style>
+}</style>

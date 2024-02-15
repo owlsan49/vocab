@@ -17,10 +17,17 @@ if __name__ == '__main__':
         # print(gt_list[317:340])
         processed_gt[key] = {'gt_vocabs': [], 'pho_sym': [], 'meaning': []}
         # print(len(gt_list))
-        for i in range(0, len(gt_list), 3):
-            # print(i)
-            processed_gt[key]['gt_vocabs'].append(gt_list[i])
-            processed_gt[key]['pho_sym'].append(gt_list[i+1])
-            processed_gt[key]['meaning'].append(gt_list[i+2])
+        # print(key)
+        # if len(gt_list) > 423:
+        # print(gt_list[234: 273])
+        if 'c5' in key:
+            for i in range(0, len(gt_list), 2):
+                processed_gt[key]['gt_vocabs'].append(gt_list[i])
+                processed_gt[key]['meaning'].append(gt_list[i+1])
+        else:
+            for i in range(0, len(gt_list), 3):
+                processed_gt[key]['gt_vocabs'].append(gt_list[i])
+                processed_gt[key]['pho_sym'].append(gt_list[i+1])
+                processed_gt[key]['meaning'].append(gt_list[i+2])
     write_json('processed_gt.json', processed_gt)
     print(processed_gt)

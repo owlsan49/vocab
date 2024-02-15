@@ -66,6 +66,7 @@ def update_record(unidf, sec_ids):
 
     record['corrected_word'] = corrected_vocabs['gt_vocabs']
     error_count = 0
+    print(len(record['corrected_word']), len(record['listening_word']))
     for idx, word in enumerate(record['corrected_word']):
         # print(record['listening_word'][idx], word)
         if record['listening_word'][idx] != word:
