@@ -1,5 +1,6 @@
 import json
 import shutil
+import re
 
 etypes = {'0': 'unfamiliar_word', '1': 'new_word',
           '2': 'spelling_mistakes_word', '3': 'sin_plu_word'}
@@ -29,10 +30,15 @@ gt_vocabs = read_json(gt_path)
 
 def init_update(record, data, file_name):
     unidf = data['unidf']
-    data['listening_word'] = data['listening_word'].replace("\n", " ").split()
+    gap_idx = unidf.find('c')
+    date_str = unidf[:gap_idx]
+    date = '-'.join(date_str[i:i + 2] for i in range(0, len(date_str), 2))
+    section = unidf[gap_idx:]
+    data['listening_word'] = data['listening_word'].replace("\n", "  ")
+    data['listening_word'] = re.split(r' {2,}', data['listening_word'])
     record[unidf] = {
-        'date': data['date'],
-        'section': data['section'],
+        'date': date,
+        'section': section,
         'listening_word': data['listening_word'],
         'word_len': len(data['listening_word']),
         'corrected_word': [],
@@ -74,7 +80,8 @@ def update_record(unidf, sec_ids):
         lw = record['listening_word'][idx]
         lw = lw.replace('=', ' ')
         word = word.replace('’', '\'')
-        if lw != word:
+        word_cvb = word.split('=')
+        if lw not in word_cvb:
             # print(error_count)
             error_count += 1
             error_words.append(lw)
