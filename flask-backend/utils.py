@@ -73,6 +73,7 @@ def update_record(unidf, sec_ids):
         # print(record['listening_word'][idx], word)
         lw = record['listening_word'][idx]
         lw = lw.replace('=', ' ')
+        word = word.replace('’', '\'')
         if lw != word:
             # print(error_count)
             error_count += 1

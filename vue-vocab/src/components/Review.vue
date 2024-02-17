@@ -11,6 +11,9 @@
   </el-form>
 
   <div>
+    <div class="demo-progress">
+      <el-progress :text-inside="true" :stroke-width="40" :percentage="barPercentage" />
+    </div>
     <audio ref="audioRef" :src="currentAudio"></audio>
     <el-button @click="togglePlay" class="el-icon-play">play</el-button>
     <p v-if="label == 1">{{ currentString }}-{{ currentMean }}</p>
@@ -74,7 +77,9 @@ export default {
     const currentAudio = computed(() => {
       return audioSource.value + (currentString.value == '' ? 'apple' : currentString.value);
     })
-    // console.log('bbbbbb', currentAudio.value)
+    const barPercentage = computed(() => {
+      return meanings.value.length > 0 ? ((currentIndex.value/meanings.value.length)*100).toFixed(2) : 0.0;
+    })
 
     function showNextString() {
       if ((currentIndex.value+1) == referWords.value.length) {
@@ -126,6 +131,7 @@ export default {
       label,
       currentString,
       currentMean,
+      barPercentage,
     };
   }
 };
