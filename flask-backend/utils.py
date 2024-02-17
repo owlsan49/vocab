@@ -4,7 +4,7 @@ import shutil
 etypes = {'0': 'unfamiliar_word', '1': 'new_word',
           '2': 'spelling_mistakes_word', '3': 'sin_plu_word'}
 record_path = r'learning-record.json'
-gt_path = 'processed_gt.json'
+gt_path = r'processed_gt.json'
 
 
 def read_json(data_path):
@@ -47,6 +47,7 @@ def init_update(record, data, file_name):
         'error_rate': 0.,
         'ew': [],
         'rw': [],
+        'mean': [],
     }
     print(record[unidf])
     write_json(file_name, record)
@@ -63,17 +64,21 @@ def update_record(unidf, sec_ids):
 
     error_words = []
     refer_words = []
+    meanings = []
 
     record['corrected_word'] = corrected_vocabs['gt_vocabs']
     error_count = 0
     print(len(record['corrected_word']), len(record['listening_word']))
     for idx, word in enumerate(record['corrected_word']):
         # print(record['listening_word'][idx], word)
-        if record['listening_word'][idx] != word:
+        lw = record['listening_word'][idx]
+        lw = lw.replace('=', ' ')
+        if lw != word:
             # print(error_count)
             error_count += 1
-            error_words.append(record['listening_word'][idx])
+            error_words.append(lw)
             refer_words.append(word)
+            meanings.append(corrected_vocabs['meaning'][idx])
 
             record['unfamiliar_word'].append(word)
             record['error_rate'] = error_count / record['word_len']
@@ -85,5 +90,6 @@ def update_record(unidf, sec_ids):
     records[unidf].update(record)
     records[unidf]['ew'] = error_words
     records[unidf]['rw'] = refer_words
+    records[unidf]['mean'] = meanings
     write_json(record_path, records)
     return record

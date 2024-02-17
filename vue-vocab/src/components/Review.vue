@@ -13,7 +13,7 @@
   <div>
     <audio ref="audioRef" :src="currentAudio"></audio>
     <el-button @click="togglePlay" class="el-icon-play">play</el-button>
-    <p v-if="label == 1">{{ currentString }}</p>
+    <p v-if="label == 1">{{ currentString }}-{{ currentMean }}</p>
     <el-input v-model="input_box" placeholder="Please input" />
   </div>
 </template>
@@ -36,10 +36,11 @@ export default {
     const audioSource = ref('https://sensearch.baidu.com/gettts?lan=uk&spd=3&source=alading&text=')
     const form = reactive({ unidf: '', update: false })
     const input_box = ref('')
-    const label = ref(0)
+    const label = ref(1)
     const flag = ref(0)
     const currentIndex = ref(-1)
     const referWords = ref([])
+    const meanings = ref([])
 
     function togglePlay() {
       audioRef.value.play();
@@ -53,7 +54,10 @@ export default {
           }
           // console.log(response.data.rw)
           referWords.value = response.data.rw
+          meanings.value = response.data.mean
           flag.value = 1
+
+          showNextString()
         })
         .catch(error => {
           alert('error')
@@ -64,14 +68,16 @@ export default {
     const currentString = computed(() => {
       return referWords.value.length > 0 ? referWords.value[currentIndex.value] : '';
     })
-    // console.log('aaaaa', currentString.value)
+    const currentMean = computed(() => {
+      return meanings.value.length > 0 ? meanings.value[currentIndex.value] : '';
+    })
     const currentAudio = computed(() => {
       return audioSource.value + (currentString.value == '' ? 'apple' : currentString.value);
     })
     // console.log('bbbbbb', currentAudio.value)
 
     function showNextString() {
-      if ((currentIndex.value + 1) == referWords.value.length) {
+      if ((currentIndex.value+1) == referWords.value.length) {
         alert('finished!')
       }
       label.value = (label.value + 1) % 3
@@ -86,10 +92,11 @@ export default {
     // 监听回车键按下事件
     function handleKeydown(event) {
       if (event.key === 'Enter') {
-        showNextString()
         console.log('press enter')
         console.log(currentString.value)
+        console.log(currentMean.value)
         togglePlay()
+        showNextString()
       }
     }
 
@@ -118,6 +125,7 @@ export default {
       input_box,
       label,
       currentString,
+      currentMean,
     };
   }
 };

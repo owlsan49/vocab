@@ -22,14 +22,18 @@ def submit():
 @app.route('/get_vocab', methods=['GET'])
 def get_vocab():
     unidf = request.args.get('unidf')
-    sec_ids = unidf[-4:]
+    sec_ids = unidf[unidf.find('c'):]
+    print(sec_ids)
     update = request.args.get('update')
     results = {'resCode': 0}
     if unidf not in records.keys():
         results['msg'] = 'wrong unidf'
     elif update == 'false':
         record = records[unidf]
+        random.seed(42)
         random.shuffle(record['rw'])
+        random.seed(42)
+        random.shuffle(record['mean'])
         results.update(record)
         print(f'2: {results}')
     elif sec_ids not in gt_vocabs.keys():

@@ -12,7 +12,12 @@
     <el-form :model="form" label-width="120px" :label-position="labelPosition">
         <div class="formatted-list">
             <h4 class="disp_listening formatted-item" v-for="(item, index) in error_words.value" :key="index">
-                {{ item }} - {{ correct_words.value[index] }}
+                <div style="display: block;">
+                    {{ item }} - {{ correct_words.value[index] }}
+                </div>
+                <div style="display: block; color: rgb(0, 145, 255);">
+                    {{ meanings.value[index] }}
+                </div>
             </h4>
             <!-- <h4 class="disp_correct"> {{ correct_words.value[index].join('   ') }} </h4> -->
         </div>
@@ -45,6 +50,7 @@ const records = reactive({})
 const corrected_results = ref([])
 const error_words = ref([])
 const correct_words = ref([])
+const meanings = ref([])
 const gap_length = 6
 const onDisplay = () => {
     for (const key in form) {
@@ -79,6 +85,9 @@ const onDisplay = () => {
                 correct_words.value = computed(() => {
                     return response.data.rw;
                 })
+                meanings.value = computed(() => {
+                    return response.data.mean;
+                })
                 console.log('bbbbbb', response.data)
             }
 
@@ -112,6 +121,7 @@ body {
 .formatted-item {
     width: 30%;
     text-align: left;
+    padding-right: 30px;
 }
 
 .res_list {
