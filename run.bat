@@ -6,3 +6,4 @@ start cmd.exe /k %PYTHON% app.py
 cd ..
 cd ./vue-vocab
 start cmd.exe /k npm run dev
+start http://localhost:5173/
