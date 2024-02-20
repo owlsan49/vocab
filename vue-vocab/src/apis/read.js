@@ -15,3 +15,10 @@ export function GetInfoPost(url, postParams){
         data: postParams
     })
 }
+
+export function GetInitInfo(){
+    return service.request({
+        method: "get",
+        url: "/init_info"
+    })
+}

@@ -19,6 +19,15 @@ def submit():
     return jsonify({'resCode': 0})
 
 
+@app.route('/init_info', methods=['GET'])
+def init_info():
+    results = {'resCode': 0, 'last_info': []}
+    rec_keys = list(records.keys())
+    for rk in rec_keys[-3:]:
+        results['last_info'].append(records[rk])
+    return jsonify(results)
+
+
 @app.route('/get_vocab', methods=['GET'])
 def get_vocab():
     unidf = request.args.get('unidf')
@@ -87,5 +96,4 @@ def get_vocab():
 
 
 if __name__ == '__main__':
-
     app.run(debug=True)

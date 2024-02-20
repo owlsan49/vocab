@@ -1,13 +1,18 @@
 <template>
+  <h5>
+    Last
+  </h5>
+  <el-table :data="tableInfo" style="width: 100%">
+    <el-table-column prop="date" label="Date" width="180" />
+    <el-table-column prop="section" label="Section" width="180" />
+    <el-table-column prop="error_rate" label="Error rate" width="180" />
+  </el-table>
+  <h5>
+    Dictation Sheet
+  </h5>
   <el-form :model="form" label-width="120px">
     <el-form-item label="unified idf">
       <el-input v-model="form.unidf" />
-    </el-form-item>
-    <el-form-item label="Date">
-      <el-input v-model="form.date" />
-    </el-form-item>
-    <el-form-item label="Section">
-      <el-input v-model="form.section" />
     </el-form-item>
     <el-form-item label="Listening Sheet">
       <el-input v-model="form.listening_word" type="textarea" />
@@ -20,14 +25,12 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue'
-import { GetInfoPost } from '@/apis/read'
+import { reactive, onMounted, ref, computed } from 'vue'
+import { GetInfoPost, GetInitInfo } from '@/apis/read'
 
 // do not use same name with ref
 const form = reactive({
   unidf: '',
-  date: '',
-  section: '',
   delivery: false,
   type: [],
   resource: '',
@@ -49,6 +52,43 @@ const onSubmit = () => {
       alert('error')
     })
 }
+
+const tableInfo = ref([])
+onMounted(() => {
+  GetInitInfo()
+    .then(response => {
+      console.log(response)
+      tableInfo.value = response.data.last_info
+      console.log(tableInfo.value)
+    })
+    .catch(error => {
+      alert('error')
+    })
+});
+
+const tableData = [
+  {
+    date: '2016-05-03',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-04',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-01',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+]
+
 </script>
 
 <style>
@@ -57,6 +97,6 @@ const onSubmit = () => {
 }
 
 body {
-    margin: 100px;
+  margin: 100px;
 }
 </style>
