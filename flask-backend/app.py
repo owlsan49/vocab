@@ -23,7 +23,7 @@ def submit():
 def init_info():
     results = {'resCode': 0, 'last_info': []}
     rec_keys = list(records.keys())
-    for rk in rec_keys[-3:]:
+    for rk in rec_keys[-10:]:
         results['last_info'].append(records[rk])
     return jsonify(results)
 
