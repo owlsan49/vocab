@@ -1,6 +1,7 @@
 import json
 import shutil
 import re
+import socket
 
 etypes = {'0': 'unfamiliar_word', '1': 'new_word',
           '2': 'spelling_mistakes_word', '3': 'sin_plu_word'}
@@ -101,3 +102,14 @@ def update_record(unidf, sec_ids):
     records[unidf]['mean'] = meanings
     write_json(record_path, records)
     return record
+
+
+def check_port_in_use(port, host='127.0.0.1'):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.bind((host, port))
+            # 如果能绑定，则端口未被占用
+            return False
+        except socket.error as e:
+            # 如果绑定时出现异常，则端口可能被占用
+            return True
